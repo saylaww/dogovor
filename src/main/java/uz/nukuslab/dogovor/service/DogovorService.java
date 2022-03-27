@@ -1,9 +1,15 @@
 package uz.nukuslab.dogovor.service;
 
+import com.lowagie.text.Cell;
 import com.lowagie.text.Document;
 import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.Table;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfWriter;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -543,35 +549,161 @@ public class DogovorService {
         return new ApiResponse("Error", false);
     }
 
-    public ApiResponse exportExcel(List<Dogovor> dogovorList) throws IOException {
+    public ApiResponse exportExcel(List<Dogovor> dogovors) throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
         FileOutputStream outputStream = new FileOutputStream(new File("src/main/resources/report.xlsx"));
 
         XSSFSheet sheet = workbook.createSheet("Report sheet");
 
-        XSSFRow row = sheet.createRow(0);
+        XSSFRow row = sheet.createRow(1);
 
-        row.createCell(1).setCellValue("Contracts reports");
+        XSSFCell cell = row.createCell(3);
+        cell.setCellValue("Contracts reports");
 
-        XSSFRow row1 = sheet.createRow(1);
+        CellStyle styleTitle = workbook.createCellStyle();
+        styleTitle.setAlignment(HorizontalAlignment.CENTER);
+        styleTitle.setVerticalAlignment(VerticalAlignment.CENTER);
 
-        row1.createCell(0).setCellValue("Id");
-        row1.createCell(1).setCellValue("Company Name");
-        row1.createCell(2).setCellValue("User");
-        row1.createCell(3).setCellValue("Price");
-        row1.createCell(4).setCellValue("Created At");
+        org.apache.poi.ss.usermodel.Font fontTitle = workbook.createFont();
+        fontTitle.setBold(true);
+        fontTitle.setFontName("Times New Roman");
+        fontTitle.setFontHeightInPoints((short) 11);
 
-        for (int i = 0; i < dogovorList.size(); i++) {
-            row1 = sheet.createRow(i + 2);
-            row1.createCell(0).setCellValue(dogovorList.get(i).getId());
-            row1.createCell(1).setCellValue(dogovorList.get(i).getCompany().getName());
-            row1.createCell(2).setCellValue(dogovorList.get(i).getUser().getFirstName());
-            row1.createCell(3).setCellValue(dogovorList.get(i).getPrice());
-            row1.createCell(4).setCellValue(dogovorList.get(i).getCreatedAt());
+        styleTitle.setFont(fontTitle);
+
+        CellStyle styleBorder = workbook.createCellStyle();
+        styleBorder.setBorderRight(BorderStyle.THIN);
+        styleBorder.setBorderLeft(BorderStyle.THIN);
+        styleBorder.setBorderTop(BorderStyle.THIN);
+        styleBorder.setBorderBottom(BorderStyle.THIN);
+
+        styleBorder.setAlignment(HorizontalAlignment.CENTER);
+        styleBorder.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        org.apache.poi.ss.usermodel.Font font = workbook.createFont();
+        font.setBold(true);
+        font.setFontName("Times New Roman");
+        font.setFontHeightInPoints((short) 11);
+
+        styleBorder.setFont(font);
+
+        cell.setCellStyle(styleTitle);
+
+        XSSFRow row1 = sheet.createRow(3);
+
+        XSSFCell cellId = row1.createCell(1);
+        cellId.setCellValue("#");
+        cellId.setCellStyle(styleBorder);
+
+        // Row width
+        sheet.setColumnWidth(1, 2000);
+        sheet.setColumnWidth(2, 8000);
+        sheet.setColumnWidth(3, 8000);
+        sheet.setColumnWidth(4, 6000);
+        sheet.setColumnWidth(5, 6000);
+
+        XSSFCell cellCName = row1.createCell(2);
+        cellCName.setCellValue("Company name");
+        cellCName.setCellStyle(styleBorder);
+
+        XSSFCell cellUser = row1.createCell(3);
+        cellUser.setCellValue("User");
+        cellUser.setCellStyle(styleBorder);
+
+        XSSFCell cellPrice = row1.createCell(4);
+        cellPrice.setCellValue("Price");
+        cellPrice.setCellStyle(styleBorder);
+
+        XSSFCell cellDate = row1.createCell(5);
+        cellDate.setCellValue("Created at");
+        cellDate.setCellStyle(styleBorder);
+
+        //Style body
+        CellStyle styleBody = workbook.createCellStyle();
+
+        styleBody.setBorderRight(BorderStyle.THIN);
+        styleBody.setBorderLeft(BorderStyle.THIN);
+        styleBody.setBorderTop(BorderStyle.THIN);
+        styleBody.setBorderBottom(BorderStyle.THIN);
+
+        styleBody.setAlignment(HorizontalAlignment.LEFT);
+        styleBody.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        org.apache.poi.ss.usermodel.Font fontBody = workbook.createFont();
+        fontBody.setBold(false);
+        fontBody.setFontName("Times New Roman");
+        fontBody.setFontHeightInPoints((short) 10);
+
+        styleBody.setFont(fontBody);
+
+        //Style for roght text
+        CellStyle styleR = workbook.createCellStyle();
+
+        styleR.setBorderRight(BorderStyle.THIN);
+        styleR.setBorderLeft(BorderStyle.THIN);
+        styleR.setBorderTop(BorderStyle.THIN);
+        styleR.setBorderBottom(BorderStyle.THIN);
+
+        styleR.setAlignment(HorizontalAlignment.RIGHT);
+        styleR.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        org.apache.poi.ss.usermodel.Font fontR = workbook.createFont();
+        fontR.setBold(false);
+        fontR.setFontName("Times New Roman");
+        fontR.setFontHeightInPoints((short) 10);
+
+        styleR.setFont(fontR);
+
+        double jami = 0;
+
+        for (int i = 0; i < dogovors.size(); i++) {
+            jami = jami + dogovors.get(i).getPrice();
+            row1 = sheet.createRow(i + 4);
+            XSSFCell cellIdVal = row1.createCell(1);
+            cellIdVal.setCellValue(i + 1);
+            cellIdVal.setCellStyle(styleBody);
+
+            XSSFCell cellCNameVal = row1.createCell(2);
+            cellCNameVal.setCellValue(dogovors.get(i).getCompany().getName());
+            cellCNameVal.setCellStyle(styleBody);
+
+            XSSFCell cellUserVal = row1.createCell(3);
+            cellUserVal.setCellValue(dogovors.get(i).getUser().getFirstName());
+            cellUserVal.setCellStyle(styleBody);
+
+            XSSFCell cellPriceVal = row1.createCell(4);
+            cellPriceVal.setCellValue(dogovors.get(i).getPrice());
+            cellPriceVal.setCellStyle(styleR);
+
+            XSSFCell cellDateVal = row1.createCell(5);
+            cellDateVal.setCellValue(dogovors.get(i).getCreatedAt().toString().substring(0, 10));
+            cellDateVal.setCellStyle(styleR);
         }
+
+        row1 = sheet.createRow(dogovors.size() + 4);
+
+        XSSFCell cellIdJ = row1.createCell(1);
+        cellIdJ.setCellValue("");
+        cellIdJ.setCellStyle(styleBorder);
+
+        XSSFCell cellIJami = row1.createCell(2);
+        cellIJami.setCellValue("Ja'mi:");
+        cellIJami.setCellStyle(styleBorder);
+
+        XSSFCell cellJamiVal = row1.createCell(3);
+        sheet.addMergedRegion(new CellRangeAddress(dogovors.size() + 4, dogovors.size() + 4, 3, 5));
+        cellJamiVal.setCellValue(jami);
+        cellJamiVal.setCellStyle(styleBorder);
+
+        XSSFCell cellUserVal = row1.createCell(4);
+        cellUserVal.setCellStyle(styleBody);
+        XSSFCell cellPriceVal = row1.createCell(5);
+        cellPriceVal.setCellStyle(styleBody);
 
         workbook.write(outputStream);
         workbook.close();
         return new ApiResponse("Success", true);
     }
+
+
 }
