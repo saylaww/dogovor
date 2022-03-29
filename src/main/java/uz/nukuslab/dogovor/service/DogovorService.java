@@ -29,6 +29,7 @@ import uz.nukuslab.dogovor.repository.DogovorRepository;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -436,36 +437,181 @@ public class DogovorService {
     }
 
     public ApiResponse exportWord(List<Dogovor> dogovorList) throws IOException {
-        XWPFDocument document = new XWPFDocument();
-        //Paragraf
-        XWPFParagraph paragraph = document.createParagraph();
-        paragraph.setAlignment(ParagraphAlignment.CENTER);
-        XWPFRun run = paragraph.createRun();
-        run.setBold(true);
-        run.setText("Dogovor Report");
+        FileOutputStream outputStream = new FileOutputStream(new File("src/main/resources/report.docx"));
 
-        //table
+        XWPFDocument document = new XWPFDocument();
+
+        XWPFParagraph pTitle = document.createParagraph();
+        pTitle.setAlignment(ParagraphAlignment.CENTER);
+        pTitle.setVerticalAlignment(TextAlignment.CENTER);
+        XWPFRun runTitle = pTitle.createRun();
+        runTitle.setText("Report Contracts");
+        runTitle.setFontFamily("Times New Roman");
+        runTitle.setBold(true);
+        runTitle.setFontSize(11);
+
         XWPFTable table = document.createTable();
+        table.setWidth("100%");
 
         XWPFTableRow row = table.getRow(0);
+
+        //Id column
         XWPFTableCell cell = row.getCell(0);
+        cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
 
-        cell.setText("ID");
-        row.createCell().setText("Company Name");
-        row.createCell().setText("User");
-        row.createCell().setText("Price");
-        row.createCell().setText("Created At");
+        XWPFParagraph paragraph = cell.addParagraph();
+        XWPFRun run = paragraph.createRun();
+        run.setFontFamily("Times New Roman");
+        run.setBold(true);
+        run.setText("Id");
+        run.setFontSize(11);
+        paragraph.setAlignment(ParagraphAlignment.CENTER);
 
-        for (Dogovor dogovor : dogovorList) {
-            row = table.createRow();
-            row.getCell(0).setText(dogovor.getId().toString());
-            row.getCell(1).setText(dogovor.getCompany().getName());
-            row.getCell(2).setText(dogovor.getUser().getFirstName());
-            row.getCell(3).setText(String.valueOf(dogovor.getPrice()));
-            row.getCell(4).setText(dogovor.getCreatedAt().toString());
+        table.getRow(0).getCell(0).removeParagraph(0);
+
+        //Company name column
+        XWPFTableCell cell2 = row.createCell();
+        cell2.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+        cell2.setWidth("2500");
+        XWPFParagraph paragraph2 = cell2.addParagraph();
+        XWPFRun run2 = paragraph2.createRun();
+        run2.setFontFamily("Times New Roman");
+        run2.setBold(true);
+        run2.setText("Company name");
+        run2.setFontSize(11);
+        paragraph2.setAlignment(ParagraphAlignment.CENTER);
+
+        table.getRow(0).getCell(1).removeParagraph(0);
+
+        //User column
+        XWPFTableCell cell3 = row.createCell();
+        cell3.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+        cell3.setWidth("3000");
+        XWPFParagraph paragraph3 = cell3.addParagraph();
+        XWPFRun run3 = paragraph3.createRun();
+        run3.setFontFamily("Times New Roman");
+        run3.setBold(true);
+        run3.setText("User");
+        run3.setFontSize(11);
+        paragraph3.setAlignment(ParagraphAlignment.CENTER);
+
+        table.getRow(0).getCell(2).removeParagraph(0);
+
+        //Price column
+        XWPFTableCell cell4 = row.createCell();
+        cell4.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+        cell4.setWidth("2000");
+        XWPFParagraph paragraph4 = cell4.addParagraph();
+        XWPFRun run4 = paragraph4.createRun();
+        run4.setFontFamily("Times New Roman");
+        run4.setBold(true);
+        run4.setText("Price");
+        run4.setFontSize(11);
+        paragraph4.setAlignment(ParagraphAlignment.CENTER);
+
+        table.getRow(0).getCell(3).removeParagraph(0);
+
+        //Price column
+        XWPFTableCell cell5 = row.createCell();
+        cell5.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+        XWPFParagraph paragraph5 = cell5.addParagraph();
+        XWPFRun run5 = paragraph5.createRun();
+        run5.setFontFamily("Times New Roman");
+        run5.setBold(true);
+        run5.setText("Created at");
+        run5.setFontSize(11);
+        paragraph5.setAlignment(ParagraphAlignment.CENTER);
+
+        table.getRow(0).getCell(4).removeParagraph(0);
+
+        double jamiSumma = 0;
+        for (int i = 0; i < dogovorList.size(); i++) {
+            jamiSumma = jamiSumma + dogovorList.get(i).getPrice();
+            XWPFTableRow rowData = table.createRow();
+            XWPFTableCell cellId;
+            cellId = rowData.getCell(0);
+            cellId.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+            XWPFParagraph paragraphId = cellId.addParagraph();
+            XWPFRun runId = paragraphId.createRun();
+            runId.setFontFamily("Times New Roman");
+            runId.setBold(false);
+            runId.setText(String.valueOf(i + 1));
+            runId.setFontSize(11);
+            paragraphId.setAlignment(ParagraphAlignment.CENTER);
+
+            XWPFTableCell cellCName = rowData.getCell(1);
+
+            cellCName.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+            XWPFParagraph paragraphCName = cellCName.addParagraph();
+            XWPFRun runCName = paragraphCName.createRun();
+            runCName.setFontFamily("Times New Roman");
+            runCName.setBold(false);
+            runCName.setText(dogovorList.get(i).getCompany().getName());
+            runCName.setFontSize(11);
+            paragraphCName.setAlignment(ParagraphAlignment.CENTER);
+
+            XWPFTableCell cellUser = rowData.getCell(2);
+
+            cellUser.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+            XWPFParagraph paragraphUser = cellUser.addParagraph();
+            XWPFRun runUser = paragraphUser.createRun();
+            runUser.setFontFamily("Times New Roman");
+            runUser.setBold(false);
+            runUser.setText(String.valueOf(dogovorList.get(i).getUser().getFirstName()));
+            runUser.setFontSize(11);
+            paragraphUser.setAlignment(ParagraphAlignment.CENTER);
+
+            XWPFTableCell cellPrice = rowData.getCell(3);
+
+            cellPrice.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+            XWPFParagraph paragraphPrice = cellPrice.addParagraph();
+            XWPFRun runPrice = paragraphPrice.createRun();
+            runPrice.setFontFamily("Times New Roman");
+            runPrice.setBold(false);
+            runPrice.setText(String.valueOf(dogovorList.get(i).getPrice()));
+            runPrice.setFontSize(11);
+            paragraphPrice.setAlignment(ParagraphAlignment.CENTER);
+
+            XWPFTableCell cellDate = rowData.getCell(4);
+            cellDate.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+            XWPFParagraph paragraphDate = cellDate.addParagraph();
+            XWPFRun runDate = paragraphDate.createRun();
+            runDate.setFontFamily("Times New Roman");
+            runDate.setBold(false);
+            runDate.setText(String.valueOf(dogovorList.get(i).getCreatedAt()));
+            runDate.setFontSize(11);
+            paragraphDate.setAlignment(ParagraphAlignment.CENTER);
         }
 
-        FileOutputStream outputStream = new FileOutputStream(new File("src/main/resources/report.docx"));
+        XWPFParagraph enter = document.createParagraph();
+        XWPFRun enterRun = enter.createRun();
+        enterRun.setText("\n");
+
+        XWPFTable table1 = document.createTable();
+        table1.setWidth("100%");
+        table1.removeBorders();
+
+        XWPFTableRow rowJami = table1.getRow(0);
+
+        XWPFTableCell cellJami = rowJami.getCell(0);
+        XWPFParagraph paragraphJami = cellJami.addParagraph();
+        XWPFRun runJami = paragraphJami.createRun();
+        runJami.setText("Jami : ");
+        runJami.setBold(true);
+        runJami.setFontFamily("Times New Roman");
+        runJami.setFontSize(11);
+        paragraphJami.setAlignment(ParagraphAlignment.LEFT);
+
+        XWPFTableCell cellJamiVal = rowJami.createCell();
+        cellJamiVal.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+
+        XWPFParagraph paragraphJamiVal = cellJamiVal.addParagraph();
+        XWPFRun runJamiVal = paragraphJamiVal.createRun();
+        runJamiVal.setText(String.valueOf(jamiSumma));
+        runJamiVal.setBold(true);
+        runJami.setFontFamily("Times New Roman");
+        runJami.setFontSize(11);
+        paragraphJamiVal.setAlignment(ParagraphAlignment.RIGHT);
 
         document.write(outputStream);
         document.close();
