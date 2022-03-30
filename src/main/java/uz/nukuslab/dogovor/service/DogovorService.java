@@ -129,27 +129,53 @@ public class DogovorService {
             document.add(paragraph5);
 
             Table table1 = new Table(5);
+            table1.setWidths(new int[]{250, 150, 100, 200, 200});
+            table1.setPadding(5);
 
-            Cell cell1 = new Cell();
+            Cell cellOne = new Cell();
+            cellOne.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            cellOne.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.CENTER);
 
             Paragraph paragraph6 = new Paragraph("Наименование продукции", fontTema);
-            table1.addCell(paragraph6);
+            paragraph6.setAlignment(Element.ALIGN_CENTER);
+            cellOne.add(paragraph6);
+            table1.addCell(cellOne);
+
+            Cell cellTwo = new Cell();
+            cellTwo.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            cellTwo.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.CENTER);
 
             Paragraph paragraph7 = new Paragraph("Ед. изм.", fontTema);
             paragraph7.setAlignment(Element.ALIGN_CENTER);
-            table1.addCell(paragraph7);
+            cellTwo.add(paragraph7);
+            table1.addCell(cellTwo);
+
+            Cell cellThree = new Cell();
+            cellThree.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            cellThree.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.CENTER);
 
             Paragraph paragraph8 = new Paragraph("Кол-во", fontTema);
             paragraph8.setAlignment(Element.ALIGN_CENTER);
-            table1.addCell(paragraph8);
+            cellThree.add(paragraph8);
+            table1.addCell(cellThree);
+
+            Cell cellFour = new Cell();
+            cellFour.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            cellFour.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.CENTER);
 
             Paragraph paragraph9 = new Paragraph("Цена за единицу", fontTema);
             paragraph9.setAlignment(Element.ALIGN_CENTER);
-            table1.addCell(paragraph9);
+            cellFour.add(paragraph9);
+            table1.addCell(cellFour);
+
+            Cell cellFive = new Cell();
+            cellFive.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            cellFive.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.CENTER);
 
             Paragraph paragraph10 = new Paragraph("Сумма без НДС", fontTema);
             paragraph10.setAlignment(Element.ALIGN_CENTER);
-            table1.addCell(paragraph10);
+            cellFive.add(paragraph10);
+            table1.addCell(cellFive);
 
             Paragraph paragraph11 = new Paragraph("Создание web сайта", fontTxt);
             paragraph11.setAlignment(Element.ALIGN_CENTER);
@@ -235,7 +261,6 @@ public class DogovorService {
 
             Paragraph paragraph33 = new Paragraph("4.5. Договор заключен в двух экземплярах, имеющих одинаковую юридическую силу.", fontTxt);
             document.add(paragraph33);
-
 
             Paragraph paragraph34 = new Paragraph("5. Адреса и банковские реквизиты Сторон:", fontTema);
             paragraph34.setAlignment(Element.ALIGN_CENTER);
@@ -619,9 +644,10 @@ public class DogovorService {
     }
 
     public ApiResponse exportPdf(List<Dogovor> dogovorList) {
-        String DEST = "src/main/resources/report.pdf";
+        String DEST = "src/main/resources/testPDF.pdf";
 
-        Document document = new Document();
+        String FONT_FILENAME = "src/main/resources/arial.ttf";
+        com.lowagie.text.Document document = new Document();
 
         try {
             PdfWriter.getInstance(document, new FileOutputStream(DEST));
@@ -630,65 +656,118 @@ public class DogovorService {
             BaseFont bfComic = BaseFont.createFont("src/main/resources/arial.ttf",
                     BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font fontTitle = new Font(bfComic, 11, Font.BOLD);
+            Font fontCity = new Font(bfComic, 11, Font.NORMAL);
             Font fontTxt = new Font(bfComic, 9, Font.NORMAL);
+            Font fontTema = new Font(bfComic, 9, Font.BOLD);
 
-            Paragraph paragraph = new Paragraph("Contracts reports", fontTitle);
+            com.lowagie.text.Paragraph paragraph = new com.lowagie.text.Paragraph("Contracts report", fontTitle);
             paragraph.setAlignment(Element.ALIGN_CENTER);
 
             document.add(paragraph);
 
-            document.add(new Paragraph("\n"));
+            document.add(new com.lowagie.text.Paragraph("\n"));
+
+            ////////////////////////
 
             Table table1 = new Table(5);
+            table1.setWidths(new int[]{50, 250, 250, 200, 150});
+            table1.setPadding(5);
 
             Cell cell1 = new Cell();
+            cell1.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            cell1.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.CENTER);
+//            cell1.setWidth("10%");
+            Paragraph paragraphId = new Paragraph("№", fontTema);
+            paragraphId.setAlignment(Element.ALIGN_CENTER);
+            cell1.add(paragraphId);
+            table1.addCell(cell1);
 
-            Paragraph paragraph6 = new Paragraph("ID", fontTitle);
-            paragraph6.setAlignment(Element.ALIGN_CENTER);
-            table1.addCell(paragraph6);
+            Cell cell2 = new Cell();
+            cell2.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.CENTER);
+            cell2.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            Paragraph paragraphCName = new Paragraph("Company name", fontTema);
+            paragraphCName.setAlignment(Element.ALIGN_CENTER);
+            cell2.add(paragraphCName);
+            table1.addCell(cell2);
 
-            Paragraph paragraph7 = new Paragraph("Company name", fontTitle);
-            paragraph7.setAlignment(Element.ALIGN_CENTER);
-            table1.addCell(paragraph7);
+            Cell cell3 = new Cell();
+            cell3.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.CENTER);
+            cell3.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            Paragraph paragraphUser = new Paragraph("User", fontTema);
+            paragraphUser.setAlignment(Element.ALIGN_CENTER);
+            cell3.add(paragraphUser);
+            table1.addCell(cell3);
 
-            Paragraph paragraph8 = new Paragraph("User", fontTitle);
-            paragraph8.setAlignment(Element.ALIGN_CENTER);
-            table1.addCell(paragraph8);
+            Cell cell4 = new Cell();
+            cell4.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.CENTER);
+            cell4.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            Paragraph paragraphPrice = new Paragraph("Price", fontTema);
+            paragraphPrice.setAlignment(Element.ALIGN_CENTER);
+            cell4.add(paragraphPrice);
+            table1.addCell(cell4);
 
-            Paragraph paragraph9 = new Paragraph("Price", fontTitle);
-            paragraph9.setAlignment(Element.ALIGN_CENTER);
-            table1.addCell(paragraph9);
+            Cell cell5 = new Cell();
+            cell5.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.CENTER);
+            cell5.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            Paragraph paragraphDate = new Paragraph("Created at", fontTema);
+            paragraphDate.setAlignment(Element.ALIGN_CENTER);
+            cell5.add(paragraphDate);
+            table1.addCell(cell5);
 
-            Paragraph paragraph10 = new Paragraph("Created at", fontTitle);
-            paragraph10.setAlignment(Element.ALIGN_CENTER);
-            table1.addCell(paragraph10);
+            double jami = 0;
 
-            for (Dogovor dogovor : dogovorList) {
-                Paragraph paragraph11 = new Paragraph(dogovor.getId().toString(), fontTxt);
-                paragraph11.setAlignment(Element.ALIGN_CENTER);
-                table1.addCell(paragraph11);
+            for (int i = 0; i < dogovorList.size(); i++) {
+                jami = jami + dogovorList.get(i).getPrice();
+                Paragraph paragraphIdVal = new Paragraph(String.valueOf(i + 1), fontTxt);
+                table1.addCell(paragraphIdVal);
 
-                Paragraph paragraph12 = new Paragraph(dogovor.getCompany().getName(), fontTxt);
-                paragraph12.setAlignment(Element.ALIGN_CENTER);
-                table1.addCell(paragraph12);
+                Paragraph paragraphCNameVal = new Paragraph(dogovorList.get(i).getCompany().getName(), fontTxt);
+                table1.addCell(paragraphCNameVal);
 
-                Paragraph paragraph13 = new Paragraph(dogovor.getUser().getFirstName(), fontTxt);
-                paragraph13.setAlignment(Element.ALIGN_CENTER);
-                table1.addCell(paragraph13);
+                Paragraph paragraphUserVal = new Paragraph(dogovorList.get(i).getUser().getFirstName(), fontTxt);
+                table1.addCell(paragraphUserVal);
 
-                Paragraph paragraph14 = new Paragraph(String.valueOf(dogovor.getPrice()), fontTxt);
-                paragraph14.setAlignment(Element.ALIGN_CENTER);
-                table1.addCell(paragraph14);
+                Paragraph paragraphPriceVal = new Paragraph(String.valueOf(dogovorList.get(i).getPrice()), fontTxt);
+                table1.addCell(paragraphPriceVal);
 
-                Paragraph paragraph15 = new Paragraph(dogovor.getCreatedAt().toString(), fontTxt);
-                paragraph15.setAlignment(Element.ALIGN_CENTER);
-                table1.addCell(paragraph15);
+                Paragraph paragraphDateVal = new Paragraph(dogovorList.get(i).getCreatedAt().toString(), fontTxt);
+                table1.addCell(paragraphDateVal);
             }
 
+            //////////////////////////////////////
+            Paragraph pEnter = new Paragraph("\n");
+
+            Table table2 = new Table(2);
+            table2.setWidths(new int[]{450,450});
+            table2.setPadding(5);
+            table2.setBorder(Rectangle.NO_BORDER);
+
+            Cell cellJami = new Cell();
+            cellJami.setBorder(Rectangle.NO_BORDER);
+            cellJami.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            cellJami.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.LEFT);
+//            cell1.setWidth("10%");
+            Paragraph paragraphJami = new Paragraph("Ja'mi : ", fontTema);
+            paragraphJami.setAlignment(Element.ALIGN_LEFT);
+            cellJami.add(paragraphJami);
+            table2.addCell(cellJami);
+
+            Cell cellJamiVal = new Cell();
+            cellJamiVal.setBorder(Rectangle.NO_BORDER);
+            cellJamiVal.setVerticalAlignment(com.lowagie.text.alignment.VerticalAlignment.CENTER);
+            cellJamiVal.setHorizontalAlignment(com.lowagie.text.alignment.HorizontalAlignment.RIGHT);
+//            cell1.setWidth("10%");
+            Paragraph paragraphJamiVal = new Paragraph(String.valueOf(jami), fontTema);
+            paragraphJamiVal.setAlignment(Element.ALIGN_RIGHT);
+            cellJamiVal.add(paragraphJamiVal);
+            table2.addCell(cellJamiVal);
+
             document.add(table1);
+            document.add(table2);
+
+            ////////////////////////
 
             document.close();
-            return new ApiResponse("Success", true);
         } catch (Exception e) {
             e.printStackTrace();
         }
