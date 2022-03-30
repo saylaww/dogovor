@@ -644,7 +644,7 @@ public class DogovorService {
     }
 
     public ApiResponse exportPdf(List<Dogovor> dogovorList) {
-        String DEST = "src/main/resources/testPDF.pdf";
+        String DEST = "src/main/resources/report.pdf";
 
         String FONT_FILENAME = "src/main/resources/arial.ttf";
         com.lowagie.text.Document document = new Document();
