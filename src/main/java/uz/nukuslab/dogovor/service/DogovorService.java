@@ -48,12 +48,10 @@ public class DogovorService {
     @Autowired
     CompanyRepository companyRepository;
 
-
     public ApiResponse getAllContract() {
         List<Dogovor> contracts = contractRepository.findAll();
         return new ApiResponse("All contracts", true, contracts);
     }
-
 
     public ApiResponse getContract(Long id) {
         Optional<Dogovor> optionalContract = contractRepository.findById(id);

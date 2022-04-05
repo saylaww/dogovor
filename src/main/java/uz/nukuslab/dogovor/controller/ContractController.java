@@ -123,6 +123,30 @@ public class ContractController {
         return ResponseEntity.status(apiResponse.isSuccess() ? 200 : 409).body(apiResponse);
     }
 
+    @PreAuthorize(value = "hasAuthority('SUPER_ADMIN')")
+    @GetMapping("/testWord")
+    public HttpEntity<?> testWord() throws IOException {
+        List<Dogovor> dogovorList = dogovorRepository.findAll();
+        contractService.exportWord(dogovorList);
+        return ResponseEntity.ok("OKKKKKKKKKKKKKKKK");
+    }
+
+    @PreAuthorize(value = "hasAuthority('SUPER_ADMIN')")
+    @GetMapping("/testPdf")
+    public HttpEntity<?> testPdf() throws IOException {
+        List<Dogovor> dogovorList = dogovorRepository.findAll();
+        contractService.exportPdf(dogovorList);
+        return ResponseEntity.ok("OKKKKKKKKKKKKKKKK");
+    }
+
+    @PreAuthorize(value = "hasAuthority('SUPER_ADMIN')")
+    @GetMapping("/testExcel")
+    public HttpEntity<?> testExcel() throws IOException {
+        List<Dogovor> dogovorList = dogovorRepository.findAll();
+        contractService.exportExcel(dogovorList);
+        return ResponseEntity.ok("OKKKKKKKKKKKKKKKK");
+    }
+
 
 
 }
