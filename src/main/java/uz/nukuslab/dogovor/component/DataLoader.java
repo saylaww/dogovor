@@ -26,7 +26,6 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-
     @Override
     public void run(String... args) throws Exception {
         if (initialMode.equals("always")) {

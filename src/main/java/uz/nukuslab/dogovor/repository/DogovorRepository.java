@@ -12,4 +12,5 @@ public interface DogovorRepository extends JpaRepository<Dogovor, Long> {
 
     List<Dogovor> findByCreatedAtBetween(Timestamp createdAt, Timestamp createdAt2);
 
+
 }

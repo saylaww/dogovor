@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import uz.nukuslab.dogovor.entity.Dogovor;
+import uz.nukuslab.dogovor.entity.User;
 import uz.nukuslab.dogovor.payload.ApiResponse;
 import uz.nukuslab.dogovor.payload.DateDto;
 import uz.nukuslab.dogovor.payload.DogovorDto;
@@ -145,6 +148,18 @@ public class ContractController {
         List<Dogovor> dogovorList = dogovorRepository.findAll();
         contractService.exportExcel(dogovorList);
         return ResponseEntity.ok("OKKKKKKKKKKKKKKKK");
+    }
+
+
+    @PreAuthorize(value = "hasAnyAuthority('SUPER_ADMIN','ADMIN')")
+    @GetMapping("/myDog")
+    public HttpEntity<?> myContracts() throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        List<Dogovor> byUserId = dogovorRepository.findByUserId(user.getId());
+//        List<Dogovor> dogovorList = dogovorRepository.findAll();
+//        contractService.exportExcel(dogovorList);
+        return ResponseEntity.ok(byUserId);
     }
 
 

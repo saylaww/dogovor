@@ -1,13 +1,13 @@
 package uz.nukuslab.dogovor.service;
 
-import com.lowagie.text.Cell;
 import com.lowagie.text.Document;
 import com.lowagie.text.*;
-import com.lowagie.text.Font;
-import com.lowagie.text.Table;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfWriter;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -27,9 +27,7 @@ import uz.nukuslab.dogovor.payload.DogovorDto;
 import uz.nukuslab.dogovor.repository.CompanyRepository;
 import uz.nukuslab.dogovor.repository.DogovorRepository;
 
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -43,10 +41,15 @@ import java.util.Optional;
 @Service
 public class DogovorService {
 
-    @Autowired
+    private final
     DogovorRepository contractRepository;
-    @Autowired
+    private final
     CompanyRepository companyRepository;
+
+    public DogovorService(DogovorRepository contractRepository, CompanyRepository companyRepository) {
+        this.contractRepository = contractRepository;
+        this.companyRepository = companyRepository;
+    }
 
     public ApiResponse getAllContract() {
         List<Dogovor> contracts = contractRepository.findAll();
