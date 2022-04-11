@@ -30,13 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     JwtFilter jwtFilter;
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web
-                .ignoring()
-                .antMatchers("/swagger-ui.html");
-    }
-
-    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(myAuthService).passwordEncoder(passwordEncoder());
@@ -50,8 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/login",
-                        "/",
-                        "/swagger-ui/index.html")
+                        "/","/dok/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
