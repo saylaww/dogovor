@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface DogovorRepository extends JpaRepository<Dogovor, Long> {
 
-    List<Dogovor> findByUserId(Integer user_id);
+//    List<Dogovor> findByUserId(Integer user_id);
+
+    List<Dogovor> findAllByUserId(Integer user_id);
 
     List<Dogovor> findByCreatedAtBetween(Timestamp createdAt, Timestamp createdAt2);
 

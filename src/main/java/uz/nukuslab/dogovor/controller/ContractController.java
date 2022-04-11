@@ -156,10 +156,10 @@ public class ContractController {
     public HttpEntity<?> myContracts() throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        List<Dogovor> byUserId = dogovorRepository.findByUserId(user.getId());
+//        List<Dogovor> byUserId = dogovorRepository.findByUserId(user.getId());
 //        List<Dogovor> dogovorList = dogovorRepository.findAll();
 //        contractService.exportExcel(dogovorList);
-        return ResponseEntity.ok(byUserId);
+        return ResponseEntity.ok("byUserId");
     }
 
 

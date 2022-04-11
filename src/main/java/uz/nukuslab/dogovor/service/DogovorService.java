@@ -409,7 +409,8 @@ public class DogovorService {
     }
 
     public ApiResponse byAdmin(Integer id) {
-        List<Dogovor> dogovorList = contractRepository.findByUserId(id);
+//        List<Dogovor> dogovorList = contractRepository.findByUserId(id);
+        List<Dogovor> dogovorList = contractRepository.findAllByUserId(id);
         return new ApiResponse("Dogovor list by admin", true, dogovorList);
     }
 
