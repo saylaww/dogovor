@@ -1,5 +1,6 @@
 package uz.nukuslab.dogovor.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,7 @@ public class ContractController {
     }
 
     @PreAuthorize(value = "hasAuthority('SUPER_ADMIN')")
+    @Operation(description = "Ha'mme dogovorlardi aliw ushin")
     @GetMapping
     public HttpEntity<?> getAllContracts() {
         ApiResponse apiResponse = contractService.getAllContract();
