@@ -1,6 +1,7 @@
 package uz.nukuslab.dogovor.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/dogovor")
+@Tag(name = "contract", description = "TEst ushin")
 public class ContractController {
 
     private final
