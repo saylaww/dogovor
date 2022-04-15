@@ -16,7 +16,8 @@ public class DogovorApplication {
     @GetMapping
     public String home(@Paydalaniwshi User user){
         System.out.println(user.getFirstName());
-        return "Dogovor app home page";
+//        return "Dogovor app home page";
+        return user.getFirstName();
     }
 
 
